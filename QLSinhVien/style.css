@@ -1,0 +1,42 @@
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.input-container {
+    margin-bottom: 20px;
+}
+
+.input-container input {
+    margin-right: 10px;
+}
+
+.button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.search {
+    padding: 8px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table th, .table td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+.table th:nth-child(6) {
+    width: 20%;
+}
