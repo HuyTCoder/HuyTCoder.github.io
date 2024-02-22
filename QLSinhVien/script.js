@@ -27,7 +27,7 @@ function addStudent() {
         studentobj['email'] = emailValue;
         studentobj['grade'] = gradeValue;
         studentobj['age'] = ageValue;
-        studentobj['class'] = classValue; // Thay đổi degree thành class
+        studentobj['class'] = classValue;
 
         students[index] = studentobj;
 
