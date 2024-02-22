@@ -7,7 +7,7 @@ function addStudent() {
     const emailValue = document.getElementById('email').value;
     const ageValue = document.getElementById('age').value;
     const gradeValue = document.getElementById('grade').value;
-    const classValue = document.getElementById('class').value; // Thay đổi degree thành class
+    const classValue = document.getElementById('class').value;
 
     if (document.querySelector("#submit").innerText == "Edit Student") {
         console.log("this will edit and not add");
@@ -38,7 +38,7 @@ function addStudent() {
         document.getElementById('email').value = "";
         document.getElementById('age').value = "";
         document.getElementById('grade').value = "";
-        document.getElementById('class').value = ""; // Thay đổi degree thành class
+        document.getElementById('class').value = "";
         
         return;
     }
@@ -56,14 +56,14 @@ function addStudent() {
         email: emailValue,
         age: ageValue,
         grade: gradeValue,
-        class: classValue // Thay đổi degree thành class
+        class: classValue
     });
 
     document.getElementById('name').value = "";
     document.getElementById('email').value = "";
     document.getElementById('age').value = "";
     document.getElementById('grade').value = "";
-    document.getElementById('class').value = ""; // Thay đổi degree thành class
+    document.getElementById('class').value = "";
 
     console.log(students);
     showTable();
@@ -85,7 +85,7 @@ function showTable() {
         const email = document.createElement('td');
         const age = document.createElement('td');
         const grade = document.createElement('td');
-        const classElem = document.createElement('td'); // Thay đổi degree thành class
+        const classElem = document.createElement('td');
 
         keys.forEach((key) => {
             if (key == 'ID') {
@@ -105,7 +105,7 @@ function showTable() {
             row.appendChild(email);
             row.appendChild(age);
             row.appendChild(grade);
-            row.appendChild(classElem); // Thay đổi degree thành class
+            row.appendChild(classElem);
         })
 
         table.appendChild(row);
@@ -150,7 +150,7 @@ function edit(id) {
     document.querySelector("#email").value = student['email'];
     document.querySelector("#grade").value = student['grade'];
     document.querySelector("#age").value = student['age'];
-    document.querySelector("#class").value = student['class']; // Thay đổi degree thành class
+    document.querySelector("#class").value = student['class'];
 
     document.getElementById("submit").innerText = "Edit Student";
 
