@@ -1,0 +1,90 @@
+/* Reset CSS */
+html, body, header, nav, main, footer {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Global styles */
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Top navigation bar */
+  .top-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #dc3545;
+    color: #fff;
+    padding: 10px 20px;
+  }
+  
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .title {
+    text-align: center;
+  }
+  
+  .sign-out {
+    text-align: left;
+  }
+  
+  .sign-out a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  /* Main navigation bar */
+  .main-navigation {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+  }
+  
+  .dashboard-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: auto;
+  }
+  
+  .main-navigation ul {
+    list-style-type: none;
+  }
+  
+  .main-navigation ul li {
+    display: inline-block;
+    margin-right: 20px;
+  }
+  
+  .main-navigation ul li:last-child {
+    margin-right: 0;
+  }
+  
+  .main-navigation ul li a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  /* Content area */
+  #content {
+    padding: 20px;
+  }
+  
+  /* Footer */
+  footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+  }
+  
