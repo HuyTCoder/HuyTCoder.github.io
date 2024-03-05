@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thống kê</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Thống kê</h1>
+
+    <div id="filter" class="section">
+      <label for="exam">Chọn kỳ thi:</label>
+      <select id="exam">
+        <option value="exam1">Kỳ thi 1</option>
+        <option value="exam2">Kỳ thi 2</option>
+        <option value="exam3">Kỳ thi 3</option>
+      </select>
+      <label for="date">Chọn ngày:</label>
+      <input type="date" id="date">
+      <button id="filterButton">Lọc</button>
+    </div>
+
+    <div id="statistics" class="section">
+      <h2>Thống kê tổng hợp</h2>
+      <table>
+        <tr>
+          <td><strong>Tổng số lần tham gia:</strong> <span id="totalAttempts">100</span></td>
+        </tr>
+        <tr>
+          <td><strong>Tỷ lệ hoàn thành:</strong> <span id="completionRate">80%</span></td>
+        </tr>
+        <tr>
+          <td><strong>Điểm trung bình:</strong> <span id="averageScore">7.5</span></td>
+        </tr>
+      </table>
+    </div>
+
+    <div id="scoreDistribution" class="section">
+      <h2>Phân phối điểm số</h2>
+      <!-- Biểu đồ phân phối điểm số sẽ được hiển thị ở đây -->
+    </div>
+
+    <div id="report" class="section">
+      <h2>Xuất báo cáo</h2>
+      <button id="exportPdfButton">Xuất PDF</button>
+      <button id="exportExcelButton">Xuất Excel</button>
+    </div>
+  </div>
+
+  <script src="statistics.js"></script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bài Thi</title>
+  <!-- CSS -->
+  <link rel="stylesheet" href="exam_style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="question">
+      <h2>Câu hỏi 1:</h2>
+      <p>Đây là nội dung của câu hỏi 1.</p>
+      <form id="question1Form">
+        <label for="answer1"><input type="radio" id="answer1" name="answer" value="A"> Lựa chọn A</label><br>
+        <label for="answer2"><input type="radio" id="answer2" name="answer" value="B"> Lựa chọn B</label><br>
+        <label for="answer3"><input type="radio" id="answer3" name="answer" value="C"> Lựa chọn C</label><br>
+        <label for="answer4"><input type="radio" id="answer4" name="answer" value="D"> Lựa chọn D</label><br>
+      </form>
+    </div>
+    <!-- Các câu hỏi khác ở đây -->
+
+    <div class="timer">
+      <p id="timer">Thời gian còn lại: <span id="time">00:00</span></p>
+    </div>
+
+    <button id="submitBtn">Nộp bài</button>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="exam_script.js"></script>
+</body>
+</html>
