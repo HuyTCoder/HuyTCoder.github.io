@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kết quả sinh viên</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1 class="heading">Kết quả sinh viên</h1>
+
+    <div class="search">
+      <label for="studentSearch" class="label">Tìm kiếm sinh viên:</label>
+      <input type="text" id="studentSearch" class="input">
+      <button id="searchButton" class="button">Tìm kiếm</button>
+    </div>
+
+    <div id="studentResults" class="section">
+      <!-- Thông tin kết quả của sinh viên sẽ được hiển thị ở đây -->
+    </div>
+
+    <div id="report" class="section">
+      <h2 class="sub-heading">Xuất báo cáo</h2>
+      <button id="exportPdfButton" class="button">Xuất PDF</button>
+      <button id="exportExcelButton" class="button">Xuất Excel</button>
+    </div>
+  </div>
+
+  <script src="studentResults.js"></script>
+</body>
+</html>

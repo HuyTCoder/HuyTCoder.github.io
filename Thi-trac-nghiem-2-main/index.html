@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4; 
+  margin: 0;
+  padding: 0;
+  
+ background-image: url(flat-lay-school-supplies-with-medical-mask-copy-space.jpg);
+ background-color: #ffffff;
+ background-repeat: no-repeat;
+
+}
+
+.container {
+    max-width: 400px;
+    margin: 100px auto; 
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9); 
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input[type="text"],
+input[type="password"] {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button[type="submit"] {
+  padding: 10px;
+  background-color: #af574c;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+.alert {
+  color: red;
+  text-align: center;
+}
+.logo-container {
+    margin-bottom: 20px;
+  }
+  
+  .logo {
+    max-width: 100px;
+    height: auto;
+  }
+  button#adminLogin {
+  padding: 10px;
+  background-color: #af574c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+button#adminLogin:hover {
+  background-color: #45a049;
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2>Login</h2>
+    <div class="logo-container">
+      <img src="ptit-logo.jpg" alt="PTIT Logo" class="logo">
+      
+    </div>
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Username" required><br>
+      <input type="password" id="password" placeholder="Password" required><br>
+      <button type="submit">Sign In</button>
+      <br>
+      <button id="adminLogin" onclick="adminLogin()">Admin Login</button>
+    </form>
+    <p id="errorMessage" class="alert" style="display: none;"></p>
+    <p style="text-align: center;">Don't have an account? <a href="register.html">Register</a></p>
+  </div>
+  
+  <script>
+  document.getElementById("loginForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
+  
+    // Retrieve user data from localStorage
+    var users = JSON.parse(localStorage.getItem("users")) || [];
+    var authenticatedUser = users.find(function(user) {
+      return user.username === username && user.password === password;
+    });
+  
+    if (authenticatedUser) {
+      alert("Login successful!");
+      
+      window.location.href = "dashboard.html";
+    } else {
+      document.getElementById("errorMessage").textContent = "Error: Invalid username or password";
+      document.getElementById("errorMessage").style.display = "block";
+    }
+  });
+  document.getElementById("adminLogin").addEventListener("click", function() {
+  var username = document.getElementById("username").value;
+  var password = document.getElementById("password").value;
+  
+  if (username === "admin" && password === "123456") {
+    alert("Admin login successful!");
+    // Redirect to admin dashboard page after successful login
+    window.location.href = "admdashboard.html"; 
+  } else {
+    alert("Error: Invalid username or password");
+  }
+});
+  </script>
+  </body>
+</html>

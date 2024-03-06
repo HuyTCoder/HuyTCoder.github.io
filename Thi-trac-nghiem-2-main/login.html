@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="login_style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="logo-container">
+      <img src="ptit-logo.jpg" alt="PTIT Logo" class="logo">
+      <h1>Dành cho Admin</h1>
+    </div>
+    <div id="loginForm">
+      <h2>Đăng nhập</h2>
+      <div class="form-group">
+        <label for="username">Tên đăng nhập:</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Mật khẩu:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <button type="submit">Đăng nhập</button>
+      <p>Bạn chưa có tài khoản? <a href="#" id="goToRegister">Đăng ký ngay</a></p>
+    </div>
+    <div id="registerForm" style="display: none;">
+      <h2>Đăng ký</h2>
+      <div class="form-group">
+        <label for="name">Tên người dùng:</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Mật khẩu:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <div class="form-group">
+        <label for="confirmPassword">Xác nhận mật khẩu:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+      </div>
+      <button type="submit">Đăng ký</button>
+      <p>Bạn đã có tài khoản? <a href="#" id="goToLogin">Đăng nhập ngay</a></p>
+    </div>
+  </div>
+
+  <script src="login_script.js"></script>
+</body>
+</html>
