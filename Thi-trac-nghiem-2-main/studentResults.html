@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Results</title>
+  <link rel="stylesheet" href="studentResults_style.css"> <!-- Include your CSS file -->
+</head>
+<body>
+  <div class="container">
+    <h1>Student Results</h1>
+
+    <div class="search-section">
+      <label for="studentSearch">Search by Name or Student ID:</label>
+      <input type="text" id="studentSearch" placeholder="Enter name or ID">
+      <button id="searchButton">Search</button>
+    </div>
+
+    <div id="studentInfo" class="hidden">
+      <h2>Student Information</h2>
+      <p><strong>Name:</strong> John Doe</p>
+      <p><strong>Student ID:</strong> 12345</p>
+    </div>
+
+    <div id="examList" class="hidden">
+      <h2>Exams Participated</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Exam Name</th>
+            <th>Score</th>
+            <th>Status</th>
+            <th>Time Taken</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Math Exam</td>
+            <td>80%</td>
+            <td>Completed</td>
+            <td>45 minutes</td>
+            <td><button class="detailsButton">View Details</button></td>
+          </tr>
+          <!-- Add more rows for other exams -->
+          <tr>
+            <td>English Exam</td>
+            <td>90%</td>
+            <td>Completed</td>
+            <td>60 minutes</td>
+            <td><button class="detailsButton">View Details</button></td>
+          </tr>
+          <tr>
+            <td>Science Exam</td>
+            <td>75%</td>
+            <td>Completed</td>
+            <td>40 minutes</td>
+            <td><button class="detailsButton">View Details</button></td>
+          </tr>
+          <!-- Add more rows for other exams -->
+        </tbody>
+      </table>
+    </div>
+
+    <div id="examDetails" class="hidden">
+      <h2>Exam Details</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Question</th>
+            <th>Student's Answer</th>
+            <th>Correct Answer</th>
+            <th>Explanation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Question 1</td>
+            <td>Option A</td>
+            <td>Option B</td>
+            <td>Explanation for question 1.</td>
+          </tr>
+          <!-- Add more rows for other questions -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="export-button">
+      <button id="exportPdfButton">Export to PDF</button>
+      <button id="exportExcelButton">Export to Excel</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script> <!-- Include your JavaScript file -->
+</body>
+</html>

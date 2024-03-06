@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Statistics</title>
+  <link rel="stylesheet" href="statistic_style.css"> <!-- Include the CSS file -->
+</head>
+<body>
+  <div class="container">
+    <h1>Statistics</h1>
+
+    <div class="filter-section">
+      <label for="examFilter">Filter by Exam:</label>
+      <select id="examFilter">
+        <option value="exam1">Exam 1</option>
+        <option value="exam2">Exam 2</option>
+        <option value="exam3">Exam 3</option>
+        <!-- Add more options as needed -->
+      </select>
+    </div>
+
+    <table id="statisticsTable">
+      <thead>
+        <tr>
+          <th>Total Participants</th>
+          <th>Completion Rate</th>
+          <th>Average Score</th>
+          <th>Score Distribution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>150</td>
+          <td>75%</td>
+          <td>85</td>
+          <td>
+            <svg width="100" height="50">
+              <rect x="0" y="0" width="20" height="50" fill="#dc3545"/>
+              <rect x="20" y="0" width="20" height="30" fill="#ffc107"/>
+              <rect x="40" y="0" width="20" height="20" fill="#28a745"/>
+              <rect x="60" y="0" width="20" height="10" fill="#007bff"/>
+              <rect x="80" y="0" width="20" height="5" fill="#6c757d"/>
+            </svg>
+          </td>
+        </tr>
+        <!-- Add more rows for different exam statistics -->
+      </tbody>
+    </table>
+
+    <div class="export-button">
+      <button id="exportPdfButton">Export to PDF</button>
+      <button id="exportExcelButton">Export to Excel</button>
+    </div>
+  </div>
+
+  <script>
+    // JavaScript code for fetching statistics data and handling export functionality will be added here
+  </script>
+</body>
+</html>
