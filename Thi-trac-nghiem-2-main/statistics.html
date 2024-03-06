@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Thống kê</title>
+    <!-- Để minh họa, chúng ta sẽ sử dụng thư viện Chart.js cho biểu đồ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #ffffff; /* Màu nền trắng */
+        }
+        h2 {
+            color: #ff0000; /* Màu chữ đỏ */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #ff0000; /* Màu nền đỏ */
+            color: #ffffff; /* Màu chữ trắng */
+        }
+        canvas {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Thống kê kết quả sinh viên</h2>
+
+<!-- Bảng thống kê -->
+<table>
+    <tr>
+        <th>Tổng số lần tham gia</th>
+        <td>100</td> <!-- Tổng số lần tham gia -->
+    </tr>
+    <tr>
+        <th>Tỷ lệ hoàn thành</th>
+        <td>85%</td> <!-- Tỷ lệ hoàn thành -->
+    </tr>
+    <tr>
+        <th>Điểm trung bình</th>
+        <td>7.9</td> <!-- Điểm trung bình -->
+    </tr>
+</table>
+
+<!-- Biểu đồ phân phối điểm số -->
+<canvas id="scoreDistributionChart" width="400" height="200"></canvas>
+
+<script>
+    // Dữ liệu minh họa cho biểu đồ
+    const scores = [7, 7.5, 8, 8.5, 9, 9.5, 10];
+    const distribution = [10, 20, 30, 25, 10, 3, 2];
+
+    // Tạo biểu đồ
+    const ctx = document.getElementById('scoreDistributionChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: scores,
+            datasets: [{
+                label: 'Phân phối điểm số',
+                data: distribution,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

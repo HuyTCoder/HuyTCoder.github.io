@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam Management</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    background-image: url(flat-lay-school-supplies-with-medical-mask-copy-space.jpg);
+    background-color: #ffffff;
+    background-repeat: no-repeat;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  form {
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  input[type="text"],
+  input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  button {
+    padding: 10px;
+    background-color: #be3826;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+
+  button:hover {
+    background-color: #be3826;
+  }
+
+  .exam-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .exam-item p {
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Exam Management</h2>
+  <div id="examList">
+    <!-- Exam list will be displayed here -->
+  </div>
+  <div class="create-exam">
+    <h3>Create New Exam</h3>
+    <form id="createExamForm">
+      <label for="examName">Exam Name:</label>
+      <input type="text" id="examName" placeholder="Enter exam name" required><br>
+      <label for="examTime">Duration (minutes):</label>
+      <input type="number" id="examTime" placeholder="Enter duration" required><br>
+      <label for="numQuestions">Number of Questions:</label>
+      <input type="number" id="numQuestions" placeholder="Enter number of questions" required><br>
+      <button type="submit">Create Exam</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Retrieve exams from local storage
+  var exams = JSON.parse(localStorage.getItem('exams')) || [];
+
+  // Function to display exams
+  function displayExams() {
+    var examList = document.getElementById('examList');
+    examList.innerHTML = ''; // Clear existing list
+    exams.forEach(function(exam, index) {
+      var examItem = document.createElement('div');
+      examItem.classList.add('exam-item');
+      examItem.innerHTML = `
+        <p>${exam.name} - Duration: ${exam.duration} minutes - ${exam.numQuestions} questions</p>
+        <button onclick="editExam(${index})">Edit</button>
+        <button onclick="deleteExam(${index})">Delete</button>
+      `;
+      examList.appendChild(examItem);
+    });
+  }
+
+  // Function to add a new exam
+  document.getElementById('createExamForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var examName = document.getElementById('examName').value;
+    var examTime = parseInt(document.getElementById('examTime').value);
+    var numQuestions = parseInt(document.getElementById('numQuestions').value);
+    var newExam = { name: examName, duration: examTime, numQuestions: numQuestions };
+    exams.push(newExam);
+    localStorage.setItem('exams', JSON.stringify(exams));
+    displayExams(); // Update exam list
+    // Clear form fields
+    document.getElementById('examName').value = '';
+    document.getElementById('examTime').value = '';
+    document.getElementById('numQuestions').value = '';
+  });
+
+  // Function to delete an exam
+  function deleteExam(index) {
+    exams.splice(index, 1);
+    localStorage.setItem('exams', JSON.stringify(exams));
+    displayExams(); // Update exam list
+  }
+
+  // Function to edit an exam
+  function editExam(index) {
+    var newName = prompt('Enter new name for the exam:');
+    var newDuration = parseInt(prompt('Enter new duration for the exam (minutes):'));
+    var newNumQuestions = parseInt(prompt('Enter new number of questions for the exam:'));
+    if (newName !== null && newName !== '') {
+      exams[index].name = newName;
+      exams[index].duration = newDuration;
+      exams[index].numQuestions = newNumQuestions;
+      localStorage.setItem('exams', JSON.stringify(exams));
+      displayExams(); // Update exam list
+    }
+  }
+
+  // Display existing exams when the page loads
+  displayExams();
+</script>
+</body>
+</html>
+
