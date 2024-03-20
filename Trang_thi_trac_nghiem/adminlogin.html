@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đăng nhập Admin</title>
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url('trg_ptit.png'); /* Nền */
+  background-size: cover;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  width: 400px;
+  margin: 0 auto;
+  padding-top: 50px;
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logo img {
+  width: 200px;
+  height: auto;
+}
+
+.login-form {
+  background-color: #ffffff; /* Màu trắng */
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.login-form h2 {
+  text-align: center;
+  color: #ff0000; /* Màu đỏ */
+}
+
+input[type="text"],
+input[type="password"],
+button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #ff0000; /* Màu đỏ */
+  color: #ffffff; /* Màu trắng */
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #cc0000; /* Màu đỏ nhạt */
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="logo">
+    <img src="ptit-logo.jpg" alt="PTIT Logo">
+  </div>
+  <div class="login-form">
+    <h2>Đăng nhập Admin</h2>
+    <form id="loginForm">
+      <label for="username">Tên người dùng:</label><br>
+      <input type="text" id="username" name="username"><br>
+      <label for="password">Mật khẩu:</label><br>
+      <input type="password" id="password" name="password"><br><br>
+      <button type="button" onclick="validateLogin()">Đăng nhập</button>
+    </form>
+  </div>
+</div>
+
+<script>
+function validateLogin() {
+  var username = document.getElementById("username").value;
+  var password = document.getElementById("password").value;
+  
+  // Kiểm tra thông tin đăng nhập
+  if (username === "admin" && password === "ptit@123") {
+    window.location.href = "admin_dashboard.html";
+  } else {
+    alert("Tên người dùng hoặc mật khẩu không chính xác!");
+  }
+}
+</script>
+</body>
+</html>
