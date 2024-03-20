@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam Result</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f3f3f3;
+  }
+  .top-bar {
+    background-color: #be3826;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    margin: 0 auto;
+    padding: 0;
+  }
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  p {
+    margin: 10px 0;
+    color: #555;
+  }
+  .exam-result {
+    width: 100%;
+    flex-grow: 1;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 0;
+    box-shadow: none;
+    overflow-y: auto;
+  }
+  .question {
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+  .question p {
+    margin-bottom: 5px;
+  }
+  .question .answer {
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <h1>Exam Result</h1>
+</div>
+
+<div class="container">
+  <h2>Exam Result</h2>
+  <div>
+    <p>Number of Correct Answers: <span id="correctAnswers"></span></p>
+    <p>Total Number of Questions: <span id="totalQuestions"></span></p>
+    <p>Your Score: <span id="score"></span></p>
+  </div>
+  <div id="answerReview">
+    
+  </div>
+</div>
+
+<script>
+var examResult = JSON.parse(localStorage.getItem("examResult"));
+var userAnswers = examResult.userAnswers;
+var questions = examResult.questions;
+
+var totalQuestions = questions.length;
+var correctAnswers = 0;
+var answerReviewHtml = ""; 
+
+for (var i = 0; i < userAnswers.length; i++) {
+  var userAnswerIndex = userAnswers[i];
+  var userAnswer = userAnswerIndex !== null ? questions[i].options[userAnswerIndex] : "Not attempted"; // Check if userAnswerIndex is not null
+  var correctAnswerIndex = questions[i].answer;
+  var correctAnswer = questions[i].options[correctAnswerIndex];
+  var isCorrect = userAnswerIndex === correctAnswerIndex;
+
+  if (isCorrect) {
+    correctAnswers++;
+  }
+
+  answerReviewHtml += "<div class='question'>";
+  answerReviewHtml += "<p>Question " + (i + 1) + ": " + questions[i].question + "</p>";
+  answerReviewHtml += "<p>Your Answer: " + userAnswer + "</p>";
+  answerReviewHtml += "<p>Correct Answer: " + correctAnswer + "</p>";
+  answerReviewHtml += "</div>";
+}
+
+var score = (correctAnswers / totalQuestions) * 100;
+
+document.getElementById("correctAnswers").textContent = correctAnswers;
+document.getElementById("totalQuestions").textContent = totalQuestions;
+document.getElementById("score").textContent = score.toFixed(2) + "%";
+
+document.getElementById("answerReview").innerHTML = answerReviewHtml;
+</script>
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trang Xem Kết Quả Sinh Viên</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #fff;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #e00000;
+    }
+    #search-form {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    #search-input {
+      padding: 5px;
+      border: 1px solid #e00000;
+      border-radius: 3px;
+    }
+    #search-button {
+      padding: 5px 10px;
+      background-color: #e00000;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    #results {
+      margin-top: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #e00000;
+      color: #fff;
+    }
+    #student-list {
+      margin-top: 20px;
+    }
+    #student-list ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    #student-list li {
+      padding: 5px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      margin-bottom: 5px;
+      cursor: pointer;
+    }
+    #student-list li:hover {
+      background-color: #e00000;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+    <h1>Trang Xem Kết Quả Sinh Viên</h1>
+    <div id="search-form">
+      <input type="text" id="search-input" placeholder="Nhập tên hoặc mã số sinh viên">
+      <button id="search-button" onclick="searchStudent()">Tìm kiếm</button>
+    </div>
+    <div id="student-list">
+      <h2>Danh sách sinh viên</h2>
+      <ul id="student-list-ul"></ul>
+    </div>
+    <div id="results"></div>
+
+  <script>
+    // Dữ liệu giả lập
+    const students = [
+      {
+        id: "SV001",
+        name: "Nguyễn Văn A",
+        exams: [
+          {
+            name: "Kỳ thi 1",
+            score: 80,
+            completed: true,
+            date: "2023-01-15",
+            answers: [
+              {
+                question: "Câu hỏi 1",
+                studentAnswer: "Trả lời của sinh viên",
+                correctAnswer: "Đáp án đúng",
+                explanation: "Giải thích cho câu hỏi"
+              },
+              // Thêm câu hỏi khác
+            ]
+          },
+          {
+            name: "Kỳ thi 2",
+            score: 90,
+            completed: true,
+            date: "2023-03-01",
+            answers: [
+              // Câu hỏi và trả lời
+            ]
+          }
+        ]
+      },
+      {
+        id: "SV002",
+        name: "Trần Thị B",
+        exams: [
+          {
+            name: "Kỳ thi 1",
+            score: 75,
+            completed: true,
+            date: "2023-01-15",
+            answers: [
+              // Câu hỏi và trả lời
+            ]
+          }
+        ]
+      },
+      {
+        id: "SV003",
+        name: "Lê Văn C",
+        exams: [
+          {
+            name: "Kỳ thi 1",
+            score: 85,
+            completed: true,
+            date: "2023-01-15",
+            answers: [
+              // Câu hỏi và trả lời
+            ]
+          },
+          {
+            name: "Kỳ thi 2",
+            score: 92,
+            completed: true,
+            date: "2023-03-01",
+            answers: [
+              // Câu hỏi và trả lời
+            ]
+          }
+        ]
+      },
+      {
+        id: "SV004",
+        name: "Phạm Thị D",
+        exams: [
+          {
+            name: "Kỳ thi 1",
+            score: 70,
+            completed: false,
+            date: "2023-01-15",
+            answers: [
+              // Câu hỏi và trả lời
+            ]
+          }
+        ]
+      },
+      {
+        id: "SV005",
+        name: "Vũ Văn E",
+        exams: [
+          {
+            name: "Kỳ thi 1",
+            score: 88,
+            completed: true,
+            date: "2023-01-15",
+            answers: [
+              // Câu hỏi và trả lời
+            ]
+          },
+          {
+            name: "Kỳ thi 2",
+            score: 78,
+            completed: true,
+            date: "2023-03-01",
+            answers: [
+              // Câu hỏi và trả lời
+            ]
+          }
+        ]
+      },
+      {
+        id: "SV006",
+        name: "Hoàng Thị F",
+        exams: [
+          {
+            name: "Kỳ thi 1",
+            score: 92,
+            completed: true,
+            date: "2023-01-15",
+            answers: [
+              // Câu hỏi và trả lời
+            ]
+          }
+        ]
+      },
+      {
+        id: "SV007",
+        name: "Đặng Văn G",
+        exams: [
+          {
+            name: "Kỳ thi 1",
+            score: 78,
+            completed: true,
+            date: "2023-01-15",
+            answers: [
+              // Câu hỏi và trả lời
+            ]
+          },
+          {
+            name: "Kỳ thi 2",
+            score: 85,
+            completed: true,
+            date: "2023-03-01",
+            answers: [
+              // Câu hỏi và trả lời
+            ]
+          }
+        ]
+      },
+      {
+        id: "SV008",
+        name: "Nguyễn Thị H",
+        exams: [
+          {
+            name: "Kỳ thi 1",
+            score: 82,
+            completed: true,
+            date: "2023-01-15",
+            answers: [
+              // Câu hỏi và trả lời
+            ]
+          },
+          {
+            name: "Kỳ thi 2",
+            score: 90,
+            completed: true,
+            date: "2023-03-01",
+            answers: [
+              // Câu hỏi và trả lời
+            ]
+          }
+        ]
+      },
+      {
+        id: "SV009",
+        name: "Trần Văn I",
+        exams: [
+          {
+            name: "Kỳ thi 1",
+            score: 75,
+            completed: false,
+            date: "2023-01-15",
+            answers: [
+              // Câu hỏi và trả lời
+            ]
+          }
+        ]
+      },
+      {
+        id: "SV010",
+        name: "Lê Thị K",
+        exams: [
+          {
+            name: "Kỳ thi 1",
+            score: 88,
+            completed: true,
+            date: "2023-01-15",
+            answers: [
+              // Câu hỏi và trả lời
+            ]
+          },
+          {
+            name: "Kỳ thi 2",
+            score: 82,
+            completed: true,
+            date: "2023-03-01",
+            answers: [
+              // Câu hỏi và trả lời
+            ]
+          }
+        ]
+      }
+    ];
+
+    function searchStudent(searchTerm = "") {
+      const results = document.getElementById("results");
+      results.innerHTML = "";
+
+      const matchingStudents = students.filter(student => {
+        const fullName = `${student.name.trim().toLowerCase()} ${student.id.trim().toLowerCase()}`;
+        return fullName.includes(searchTerm.trim().toLowerCase());
+      });
+
+      if (matchingStudents.length === 0) {
+        results.innerHTML = "<p>Không tìm thấy sinh viên phù hợp.</p>";
+      } else {
+        matchingStudents.forEach(student => {
+          const studentDiv = document.createElement("div");
+          studentDiv.innerHTML = `
+            <h2>${student.name} (${student.id})</h2>
+            <table>
+              <tr>
+                <th>Kỳ thi</th>
+                <th>Điểm</th>
+                <th>Trạng thái</th>
+                <th>Ngày thi</th>
+                <th>Chi tiết</th>
+              </tr>
+              ${student.exams.map(exam => `
+                <tr>
+                  <td>${exam.name}</td>
+                  <td>${exam.score}</td>
+                  <td>${exam.completed ? "Hoàn thành" : "Không hoàn thành"}</td>
+                  <td>${exam.date}</td>
+                  <td><button onclick="showExamDetails('${student.id}', '${exam.name}', this)">Xem chi tiết</button></td>
+                </tr>
+              `).join("")}
+            </table>
+          `;
+          results.appendChild(studentDiv);
+        });
+      }
+    }
+
+    function showExamDetails(studentId, examName, button) {
+      const examDetailsDiv = document.getElementById(`exam-details-${studentId}-${examName}`);
+      if (examDetailsDiv) {
+        examDetailsDiv.style.display = examDetailsDiv.style.display === "none" ? "block" : "none";
+      } else {
+        const student = students.find(s => s.id === studentId);
+        const exam = student.exams.find(e => e.name === examName);
+
+        const newExamDetailsDiv = document.createElement("div");
+        newExamDetailsDiv.id = `exam-details-${studentId}-${examName}`;
+        newExamDetailsDiv.innerHTML = `
+          <h3>${examName}</h3>
+          <ul>
+            ${exam.answers.map(answer => `
+              <li>
+                <h4>${answer.question}</h4>
+                <p>Trả lời của sinh viên: ${answer.studentAnswer}</p>
+                <p>Đáp án đúng: ${answer.correctAnswer}</p>
+                <p>Giải thích: ${answer.explanation}</p>
+              </li>
+            `).join("")}
+          </ul>
+        `;
+
+        const results = document.getElementById("results");
+        const studentDiv = button.closest("div");
+        studentDiv.appendChild(newExamDetailsDiv);
+      }
+    }
+
+    // Hiển thị danh sách sinh viên
+    const studentListUl = document.getElementById("student-list-ul");
+    students.forEach(student => {
+      const li = document.createElement("li");
+      li.textContent = `${student.name} (${student.id})`;
+      li.onclick = () => {
+        searchStudent(`${student.name} ${student.id}`);
+      };
+      studentListUl.appendChild(li);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  /* Set body to full screen */
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  /* Adjust container to take full height and width */
+  height: 100vh;
+  width: 100vw;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto; /* Add scrollbar if content exceeds */
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+input[type="text"],
+select {
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #be3826;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #be3826;
+}
+
+#exams {
+  margin-top: 20px;
+}
+
+.exam {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+.exam h3 {
+  margin-bottom: 5px;
+}
+
+.exam p {
+  margin: 0;
+}
+
+.exam button {
+  margin-top: 10px;
+}
+
+.alert {
+  color: red;
+  text-align: center;
+}
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  background-color: #be3826; /* Add red background color */
+  padding: 30px; /* Add some padding for better visibility */
+  color:#f4f4f4
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Multiple-choice exam - Dashboard  </h2> <br> <br>
+  <div>
+    <input type="text" id="searchInput" placeholder="Search by exam name">
+    <select id="statusFilter">
+      <option value="">All Statuses</option>
+      <option value="open">Open</option>
+      <option value="closed">Closed</option>
+    </select>
+    <button onclick="applyFilters()">Apply Filters</button>
+    <button onclick="resetFilters()">Reset Filters</button>
+  </div>
+  <div id="exams">
+
+  </div>
+</div>
+
+<script>
+
+var exams = [
+  { name: "Practice Exam", status: "open" },
+  { name: "Midterm Exam", status: "closed" },
+  { name: "Final Exam", status: "closed" }
+];
+
+
+function generateExamList() {
+  var examsContainer = document.getElementById("exams");
+  examsContainer.innerHTML = ""; 
+
+  exams.forEach(function(exam) {
+    var examDiv = document.createElement("div");
+    examDiv.classList.add("exam");
+    examDiv.innerHTML = "<h3>" + exam.name + "</h3><p>Status: " + exam.status + "</p>";
+    if (exam.status === "open") {
+      var startButton = document.createElement("button");
+      startButton.textContent = "Start Exam";
+      startButton.addEventListener("click", function() {
+        
+        window.location.href = "exam.html?name=" + encodeURIComponent(exam.name);
+      });
+      examDiv.appendChild(startButton);
+    }
+    examsContainer.appendChild(examDiv);
+  });
+}
+
+
+function applyFilters() {
+  var searchInput = document.getElementById("searchInput").value.toLowerCase();
+  var statusFilter = document.getElementById("statusFilter").value;
+  var filteredExams = exams.filter(function(exam) {
+    return exam.name.toLowerCase().includes(searchInput) && (statusFilter === "" || exam.status === statusFilter);
+  });
+  renderFilteredExams(filteredExams);
+}
+
+
+function renderFilteredExams(filteredExams) {
+  var examsContainer = document.getElementById("exams");
+  examsContainer.innerHTML = ""; 
+
+  filteredExams.forEach(function(exam) {
+    var examDiv = document.createElement("div");
+    examDiv.classList.add("exam");
+    examDiv.innerHTML = "<h3>" + exam.name + "</h3><p>Status: " + exam.status + "</p>";
+    if (exam.status === "open") {
+      var startButton = document.createElement("button");
+      startButton.textContent = "Start Exam";
+      startButton.addEventListener("click", function() {
+        // Redirect to the exam page when the button is clicked
+        window.location.href = "exam.html?name=" + encodeURIComponent(exam.name);
+      });
+      examDiv.appendChild(startButton);
+    }
+    examsContainer.appendChild(examDiv);
+  });
+}
+
+
+function resetFilters() {
+  document.getElementById("searchInput").value = "";
+  document.getElementById("statusFilter").value = "";
+  generateExamList();
+}
+
+
+generateExamList();
+</script>
+</body>
+</html>

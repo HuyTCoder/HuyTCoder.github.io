@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiển thị thông tin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa; /* Màu nền chính */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 50%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        #info {
+            margin-top: 20px;
+        }
+
+        #info p {
+            margin-bottom: 10px;
+        }
+
+        #info p span {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Thông tin đã nhập</h2>
+        <div id="info">
+            <p>Họ và tên: <span id="fullname"></span></p>
+            <p>Ngày tháng năm sinh: <span id="dob"></span></p>
+            <p>CCCD: <span id="cccd"></span></p>
+            <p>Địa chỉ thường trú: <span id="address"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Lấy thông tin từ URL
+        const params = new URLSearchParams(window.location.search);
+        
+        // Hiển thị thông tin đã nhập
+        document.getElementById('fullname').innerText = params.get('fullname');
+        document.getElementById('dob').innerText = params.get('dob');
+        document.getElementById('cccd').innerText = params.get('cccd');
+        document.getElementById('address').innerText = params.get('address');
+    </script>
+</body>
+</html>

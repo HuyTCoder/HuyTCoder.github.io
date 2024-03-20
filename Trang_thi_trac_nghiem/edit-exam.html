@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tạo/Chỉnh sửa Kỳ thi</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Tạo/Chỉnh sửa Kỳ thi</h1>
+    <form>
+      <div class="form-group">
+        <label for="examName">Tên bài thi:</label>
+        <input type="text" class="form-control" id="examName" required>
+      </div>
+      <div class="form-group">
+        <label for="examDescription">Mô tả bài thi:</label>
+        <textarea class="form-control" id="examDescription" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Loại bài thi:</label>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="examType" id="freeExam" value="free" checked>
+          <label class="form-check-label" for="freeExam">Tự do</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="examType" id="timedExam" value="timed">
+          <label class="form-check-label" for="timedExam">Thời gian cụ thể</label>
+        </div>
+      </div>
+      <div id="timedExamOptions" style="display: none;">
+        <div class="form-group">
+          <label for="examDuration">Thời gian thi (phút):</label>
+          <input type="number" class="form-control" id="examDuration" min="1">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Danh sách câu hỏi:</label>
+        <div id="questionList">
+          <div class="question">
+            <div class="form-group">
+              <label for="questionText">Nội dung câu hỏi:</label>
+              <input type="text" class="form-control" id="questionText" required>
+            </div>
+            <div class="form-group">
+              <label>Lựa chọn trả lời:</label>
+              <div class="answer-list">
+                <div class="answer">
+                  <input type="text" class="form-control" required>
+                  <button type="button" class="btn btn-danger btn-sm" onclick="removeAnswer(this.parentNode)">Xóa</button>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-success mb-2" onclick="addAnswer(this.parentNode.querySelector('.answer-list'))">Thêm lựa chọn trả lời</button>
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary mb-2" onclick="addQuestion()">Thêm câu hỏi</button>
+      </div>
+      <button type="button" class="btn btn-success" onclick="saveExam()">Lưu</button>
+    </form>
+
+    <div id="examPreview" style="display: none;">
+      <h2>Xem trước bài thi</h2>
+      <div id="examQuestions">
+        <!-- Các câu hỏi sẽ được hiển thị tại đây -->
+      </div>
+      <button type="button" class="btn btn-primary" onclick="editExam()">Chỉnh sửa</button>
+    </div>
+
+    <div id="savedExams">
+      <h2>Danh sách kỳ thi đã tạo</h2>
+      <ul id="examList">
+        <!-- Danh sách các kỳ thi sẽ được thêm vào đây -->
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    // Mảng lưu trữ thông tin các kỳ thi đã tạo
+let savedExams = [];
+
+// Hàm để hiển thị/ẩn phần chọn thời gian thi
+function toggleTimedExamOptions() {
+  const timedExamOptions = document.getElementById('timedExamOptions');
+  const examType = document.querySelector('input[name="examType"]:checked').value;
+  timedExamOptions.style.display = examType === 'timed' ? 'block' : 'none';
+}
+
+// Hàm để thêm câu hỏi
+function addQuestion() {
+  const questionList = document.getElementById('questionList');
+  const newQuestion = document.createElement('div');
+  newQuestion.className = 'question';
+  newQuestion.innerHTML = `
+    <div class="form-group">
+      <label for="questionText">Nội dung câu hỏi:</label>
+      <input type="text" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label>Lựa chọn trả lời:</label>
+      <div class="answer-list">
+        <div class="answer">
+          <input type="text" class="form-control" required>
+          <button type="button" class="btn btn-danger btn-sm" onclick="removeAnswer(this.parentNode)">Xóa</button>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="btn btn-success mb-2" onclick="addAnswer(this.parentNode.querySelector('.answer-list'))">Thêm lựa chọn trả lời</button>
+  `;
+  questionList.appendChild(newQuestion);
+}
+
+// Hàm để thêm lựa chọn trả lời
+function addAnswer(answersList) {
+  const newAnswer = document.createElement('div');
+  newAnswer.className = 'answer';
+  newAnswer.innerHTML = `
+    <input type="text" class="form-control" required>
+    <button type="button" class="btn btn-danger btn-sm" onclick="removeAnswer(this.parentNode)">Xóa</button>
+  `;
+  answersList.appendChild(newAnswer);
+}
+
+// Hàm để xóa câu hỏi
+function removeQuestion(questionDiv) {
+  questionDiv.remove();
+}
+
+// Hàm để xóa lựa chọn trả lời
+function removeAnswer(answerDiv) {
+  answerDiv.remove();
+}
+
+// Lắng nghe sự kiện thay đổi loại kỳ thi để hiển thị/ẩn phần chọn thời gian thi
+const examTypeRadios = document.querySelectorAll('input[name="examType"]');
+examTypeRadios.forEach(function(radio) {
+  radio.addEventListener('change', toggleTimedExamOptions);
+});
+
+// Hàm để lưu thông tin bài thi và hiển thị phần xem trước
+function saveExam() {
+  // Lấy thông tin bài thi từ các trường nhập liệu
+  const examName = document.getElementById('examName').value;
+  const examDescription = document.getElementById('examDescription').value;
+  const examType = document.querySelector('input[name="examType"]:checked').value;
+  const examDuration = document.getElementById('examDuration').value;
+
+  const questions = [];
+  const questionDivs = document.getElementById('questionList').getElementsByClassName('question');
+  for (let i = 0; i < questionDivs.length; i++) {
+    const questionDiv = questionDivs[i];
+    const questionText = questionDiv.getElementsByClassName('form-control')[0].value;
+    const answers = [];
+    const answerDivs = questionDiv.getElementsByClassName('answer');
+    for (let j = 0; j < answerDivs.length; j++) {
+      const answerDiv = answerDivs[j];
+      const answerText = answerDiv.getElementsByClassName('form-control')[0].value;
+      answers.push(answerText);
+    }
+    questions.push({ text: questionText, answers: answers });
+  }
+
+  // Tạo đối tượng chứa thông tin bài thi
+  const examInfo = {
+    name: examName,
+    description: examDescription,
+    type: examType,
+    duration: examDuration,
+    questions: questions
+  };
+
+  // Thêm thông tin bài thi vào mảng savedExams
+  savedExams.push(examInfo);
+
+  // Hiển thị danh sách các kỳ thi đã tạo
+  renderExamList();
+
+  // Hiển thị phần xem trước bài thi
+  renderExamPreview(examInfo);
+}
+
+// Hàm để hiển thị danh sách các kỳ thi đã tạo
+function renderExamList() {
+  const examList = document.getElementById('examList');
+  examList.innerHTML = '';
+
+  savedExams.forEach((exam, index) => {
+    const listItem = document.createElement('li');
+    const examLink = document.createElement('a');
+    examLink.href = '#';
+    examLink.textContent = `${index + 1}. ${exam.name}`;
+    examLink.onclick = () => renderExamPreview(exam);
+    listItem.appendChild(examLink);
+    examList.appendChild(listItem);
+  });
+}
+
+// Hàm để hiển thị phần xem trước bài thi
+function renderExamPreview(examInfo) {
+  const examPreviewDiv = document.getElementById('examPreview');
+  const examQuestionsDiv = document.getElementById('examQuestions');
+  examQuestionsDiv.innerHTML = '';
+
+  // Hiển thị thông tin bài thi
+  const examNameElement = document.createElement('h3');
+  examNameElement.textContent = `Tên: ${examInfo.name}`;
+  examQuestionsDiv.appendChild(examNameElement);
+
+  const examDescriptionElement = document.createElement('p');
+  examDescriptionElement.textContent = `Mô tả: ${examInfo.description}`;
+  examQuestionsDiv.appendChild(examDescriptionElement);
+
+  const examTypeElement = document.createElement('p');
+  examTypeElement.textContent = `Loại: ${examInfo.type === 'free' ? 'Tự do' : 'Thời gian cụ thể'}`;
+  examQuestionsDiv.appendChild(examTypeElement);
+
+  if (examInfo.type === 'timed') {
+    const examDurationElement = document.createElement('p');
+    examDurationElement.textContent = `Thời gian thi: ${examInfo.duration} phút`;
+    examQuestionsDiv.appendChild(examDurationElement);
+  }
+
+  // Hiển thị danh sách câu hỏi và lựa chọn trả lời
+  const questionsElement = document.createElement('div');
+  examInfo.questions.forEach((question, index) => {
+    const questionDiv = document.createElement('div');
+    questionDiv.innerHTML = `<h4>Câu hỏi ${index + 1}: ${question.text}</h4>`;
+    const answersList = document.createElement('ul');
+    question.answers.forEach(answer => {
+      const answerItem = document.createElement('li');
+      answerItem.textContent = answer;
+      answersList.appendChild(answerItem);
+    });
+    questionDiv.appendChild(answersList);
+    questionsElement.appendChild(questionDiv);
+  });
+  examQuestionsDiv.appendChild(questionsElement);
+
+  examPreviewDiv.style.display = 'block';
+}
+
+// Hàm để chỉnh sửa bài thi
+function editExam() {
+  const examPreviewDiv = document.getElementById('examPreview');
+  examPreviewDiv.style.display = 'none';
+}
+
+// Khởi tạo sự kiện
+document.addEventListener('DOMContentLoaded', function() {
+  // Lấy danh sách kỳ thi đã lưu từ localStorage (nếu có)
+  const savedExamsJSON = localStorage.getItem('savedExams');
+  if (savedExamsJSON) {
+    savedExams = JSON.parse(savedExamsJSON);
+    renderExamList();
+  }
+
+  // Lắng nghe sự kiện lưu kỳ thi
+  const saveExamButton = document.querySelector('button[onclick="saveExam()"]');
+  saveExamButton.addEventListener('click', function() {
+    // Lưu danh sách kỳ thi vào localStorage
+    localStorage.setItem('savedExams', JSON.stringify(savedExams));
+  });
+});
+  </script>
+ </body>
+</html>

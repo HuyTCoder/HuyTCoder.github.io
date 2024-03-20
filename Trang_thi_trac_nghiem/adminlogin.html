@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Admin</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+          background-color: #fff;
+          color: #000;
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 20px;
+        }
+    
+        h1 {
+          color: #ff0000;
+        }
+    
+        ul {
+          list-style-type: none;
+          padding: 0;
+        }
+    
+        li {
+          margin-bottom: 10px;
+        }
+    
+        a {
+          color: #ff0000;
+          text-decoration: none;
+        }
+    
+        button {
+          background-color: #ff0000;
+          border: none;
+          color: #fff;
+          padding: 5px 10px;
+          cursor: pointer;
+        }
+    
+        table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+    
+        th, td {
+          padding: 8px;
+          text-align: left;
+          border-bottom: 1px solid #ddd;
+        }
+    
+        th {
+          background-color: #ff0000;
+          color: #fff;
+        }
+    
+        .modal {
+          display: none;
+          position: fixed;
+          z-index: 1;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          overflow: auto;
+          background-color: rgba(0, 0, 0, 0.4);
+        }
+    
+        .modal-content {
+          background-color: #fff;
+          margin: 10% auto;
+          padding: 20px;
+          border: 1px solid #888;
+          width: 80%;
+        }
+    
+        .close {
+          color: #888;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+          cursor: pointer;
+        }
+    
+        .close:hover,
+        .close:focus {
+          color: #000;
+          text-decoration: none;
+          cursor: pointer;
+        }
+      </style>
+</head>
+<body>
+    <div class="container my-5">
+        <h1>Dashboard Admin</h1>
+        <ul class="nav nav-tabs mb-3">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#exams">Quản lý kỳ thi</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#users">Quản lý người dùng</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#statistics">Thống kê</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#view-results">Xem kết quả</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="exams">
+                <h2>Danh sách kỳ thi</h2>
+                <button class="btn btn-primary mb-3" onclick="window.location.href='edit-exam.html'">Tạo kỳ thi mới</button>
+                <ul id="examList"></ul>
+            </div>
+            <div class="tab-pane" id="users">
+                <h2>Danh sách người dùng</h2>
+                <button class="btn btn-primary mb-3" onclick="showAddUserModal()">Thêm người dùng</button>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tên</th>
+                            <th>Email</th>
+                            <th>Loại</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userList"></tbody>
+                </table>
+            </div>
+            <div class="tab-pane" id="statistics">
+                <h2>Thống kê</h2>
+                <a href="statistics.html" class="btn btn-primary">Xem thống kê</a>
+            </div>
+            <div class="tab-pane" id="view-results">
+                <h2>Xem kết quả</h2>
+                <a href="view-results.html" class="btn btn-primary">Xem kết quả sinh viên</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for adding user -->
+    <div class="modal" id="addUserModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thêm người dùng</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addUserForm">
+                        <div class="form-group">
+                            <label for="nameInput">Tên</label>
+                            <input type="text" class="form-control" id="nameInput" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="emailInput">Email</label>
+                            <input type="email" class="form-control" id="emailInput" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="typeSelect">Loại</label>
+                            <select class="form-control" id="typeSelect">
+                                <option value="student">Sinh viên</option>
+                                <option value="admin">Quản trị viên</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" onclick="addUser()">Thêm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Khởi tạo danh sách kỳ thi và danh sách người dùng
+let exams = [];
+let users = [];
+
+// Hiển thị danh sách kỳ thi lên giao diện người dùng
+function renderExamList() {
+  const examListElement = document.getElementById('examList');
+  examListElement.innerHTML = ''; // Xóa nội dung hiện tại
+  
+  exams.forEach((exam, index) => {
+    const li = document.createElement('li');
+    
+    // Tạo liên kết đến trang "edit-exam.html" với tham số id là chỉ mục của kỳ thi
+    const examLink = document.createElement('a');
+    examLink.href = `edit-exam.html?id=${index}`;
+    examLink.textContent = `Exam ${index + 1}`;
+    
+    // Tạo nút "Xóa" để xóa kỳ thi
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Xóa';
+    deleteButton.addEventListener('click', () => {
+      deleteExam(index);
+    });
+    
+    li.appendChild(examLink);
+    li.appendChild(deleteButton);
+    
+    examListElement.appendChild(li);
+  });
+}
+
+// Xóa một kỳ thi khỏi danh sách
+function deleteExam(index) {
+  exams.splice(index, 1);
+  renderExamList();
+}
+
+// Hiển thị danh sách người dùng lên giao diện người dùng
+function renderUserList() {
+  const userListElement = document.getElementById('userList');
+  userListElement.innerHTML = ''; // Xóa nội dung hiện tại
+  
+  users.forEach((user, index) => {
+    const row = document.createElement('tr');
+    
+    // Tạo các ô dữ liệu cho tên, email và loại người dùng
+    const nameCell = document.createElement('td');
+    nameCell.textContent = user.name;
+    
+    const emailCell = document.createElement('td');
+    emailCell.textContent = user.email;
+    
+    const typeCell = document.createElement('td');
+    typeCell.textContent = user.type;
+    
+    // Tạo nút "Sửa" để chỉnh sửa thông tin người dùng
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Sửa';
+    editButton.addEventListener('click', () => {
+      showEditUserModal(index);
+    });
+    
+    // Tạo nút "Xóa" để xóa người dùng
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Xóa';
+    deleteButton.addEventListener('click', () => {
+      deleteUser(index);
+    });
+    
+    row.appendChild(nameCell);
+    row.appendChild(emailCell);
+    row.appendChild(typeCell);
+    row.appendChild(editButton);
+    row.appendChild(deleteButton);
+    
+    userListElement.appendChild(row);
+  });
+}
+
+// Hiển thị hộp thoại modal để thêm người dùng mới
+function showAddUserModal() {
+  // Code để hiển thị hộp thoại modal
+}
+
+// Thêm một người dùng mới vào danh sách
+function addUser() {
+  const nameInput = document.getElementById('nameInput');
+  const emailInput = document.getElementById('emailInput');
+  const typeSelect = document.getElementById('typeSelect');
+  
+  const newUser = {
+    name: nameInput.value,
+    email: emailInput.value,
+    type: typeSelect.value
+  };
+  
+  users.push(newUser);
+  renderUserList();
+  
+  // Lưu dữ liệu vào localStorage
+  saveDataToLocalStorage();
+}
+
+// Xóa một người dùng khỏi danh sách
+function deleteUser(index) {
+  users.splice(index, 1);
+  renderUserList();
+  
+  // Lưu dữ liệu vào localStorage
+  saveDataToLocalStorage();
+}
+
+// Hiển thị hộp thoại modal để chỉnh sửa thông tin người dùng
+function showEditUserModal(index) {
+  // Code để hiển thị hộp thoại modal với thông tin người dùng tại chỉ mục index
+}
+
+// Cập nhật thông tin người dùng sau khi chỉnh sửa
+function updateUser(index) {
+  const nameInput = document.getElementById('nameInput');
+  const emailInput = document.getElementById('emailInput');
+  const typeSelect = document.getElementById('typeSelect');
+  
+  users[index].name = nameInput.value;
+  users[index].email = emailInput.value;
+  users[index].type = typeSelect.value;
+  
+  renderUserList();
+  
+  // Lưu dữ liệu vào localStorage
+  saveDataToLocalStorage();
+}
+
+// Lấy dữ liệu từ localStoragevà khởi tạo danh sách kỳ thi và danh sách người dùng
+function initializeData() {
+  const examsData = localStorage.getItem('exams');
+  const usersData = localStorage.getItem('users');
+  
+  if (examsData) {
+    exams = JSON.parse(examsData);
+  }
+  
+  if (usersData) {
+    users = JSON.parse(usersData);
+  }
+  
+  renderExamList();
+  renderUserList();
+}
+
+// Lưu dữ liệu vào localStorage
+function saveDataToLocalStorage() {
+  localStorage.setItem('exams', JSON.stringify(exams));
+  localStorage.setItem('users', JSON.stringify(users));
+}
+
+// Gọi hàm initializeData khi trang web được tải
+window.addEventListener('DOMContentLoaded', initializeData);
+    </script>
+</body>
+</html>

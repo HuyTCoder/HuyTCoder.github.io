@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trang Thống kê</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1, h2 {
+      color: #e00000;
+    }
+
+    .filters {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+    }
+
+    .filters label {
+      margin-right: 10px;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .stat {
+      background-color: #f9f9f9;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .chart-container {
+      margin-bottom: 20px;
+    }
+
+    #export-btn {
+      display: block;
+      margin: 0 auto;
+      padding: 10px 20px;
+      background-color: #e00000;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .chart-container canvas {
+      max-width: 400px;
+      max-height: 300px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Trang Thống kê</h1>
+
+    <div class="filters">
+      <label for="exam">Kỳ thi:</label>
+      <select id="exam">
+        <option value="all">Tất cả</option>
+        <option value="exam1">Kỳ thi 1</option>
+        <option value="exam2">Kỳ thi 2</option>
+      </select>
+
+      <label for="date">Ngày tháng:</label>
+      <input type="date" id="date">
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <h2>Tổng số lần tham gia</h2>
+        <p id="total-attempts">100</p>
+      </div>
+      <div class="stat">
+        <h2>Tỷ lệ hoàn thành</h2>
+        <p id="completion-rate">80%</p>
+      </div>
+      <div class="stat">
+        <h2>Điểm trung bình</h2>
+        <p id="average-score">75</p>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <h2>Phân phối điểm số</h2>
+      <canvas id="score-distribution"></canvas>
+    </div>
+
+    <div class="chart-container">
+      <h2>Tỷ lệ hoàn thành</h2>
+      <canvas id="completion-pie"></canvas>
+    </div>
+
+    <div class="chart-container">
+      <h2>Phân loại điểm số</h2>
+      <canvas id="score-categories"></canvas>
+    </div>
+
+    <button id="export-btn">Xuất báo cáo</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Dữ liệu cho kỳ thi 1
+    const exam1Scores = [80, 75, 92, 65, 88, 70, 85, 95, 72, 68];
+    const exam1CompletedAttempts = 80;
+    const exam1TotalAttempts = 100;
+
+    // Dữ liệu cho kỳ thi 2
+    const exam2Scores = [85, 90, 78, 92, 75, 82, 88, 95, 70, 85];
+    const exam2CompletedAttempts = 90;
+    const exam2TotalAttempts = 110;
+
+    // Đặt mặc định cho ngày tháng của kỳ thi 1 và 2
+    const exam1Date = new Date('2023-01-15');
+    const exam2Date = new Date('2023-03-01');
+
+    // Lấy phần tử select và input date
+    const examSelect = document.getElementById('exam');
+    const dateInput = document.getElementById('date');
+
+    // Đặt mặc định cho ngày tháng khi thay đổi kỳ thi
+    examSelect.addEventListener('change', () => {
+      const selectedExam = examSelect.value;
+      if (selectedExam === 'exam1') {
+        dateInput.value = exam1Date.toISOString().split('T')[0];
+        updateStats(exam1Scores, exam1CompletedAttempts, exam1TotalAttempts);
+      } else if (selectedExam === 'exam2') {
+        dateInput.value = exam2Date.toISOString().split('T')[0];
+        updateStats(exam2Scores, exam2CompletedAttempts, exam2TotalAttempts);
+      } else {
+        dateInput.value = '';
+        updateStats([], 0, 0);
+      }
+    });
+
+    // Hàm cập nhật thống kê
+    function updateStats(scores, completedAttempts, totalAttempts) {
+      const totalAttemptsElement = document.getElementById('total-attempts');
+      const completionRateElement = document.getElementById('completion-rate');
+      const averageScoreElement = document.getElementById('average-score');
+
+      totalAttemptsElement.textContent = totalAttempts;
+      completionRateElement.textContent = `${((completedAttempts / totalAttempts) * 100).toFixed(2)}%`;
+      averageScoreElement.textContent = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2);
+
+      // Cập nhật biểu đồ
+      updateCharts(scores, completedAttempts, totalAttempts);
+    }
+
+    // Hàm cập nhật biểu đồ
+    function updateCharts(scores, completedAttempts, totalAttempts) {
+      // Cập nhật biểu đồ phân phối điểm số
+      scoreDistributionChart.data.labels = scores.map((_, index) => `Student ${index + 1}`);
+      scoreDistributionChart.data.datasets[0].data = scores;
+      scoreDistributionChart.update();
+
+      // Cập nhật biểu đồ tỷ lệ hoàn thành
+      completionPieChart.data.datasets[0].data = [completedAttempts, totalAttempts - completedAttempts];
+      completionPieChart.update();
+
+      // Cập nhật biểu đồ phân loại điểm số
+      updateScoreCategories(scores);
+    }
+
+    // Hàm cập nhật phân loại điểm số
+    function updateScoreCategories(scores) {
+      const scoreCategories = {
+        'Excellent': 0,
+        'Good': 0,
+        'Average': 0,
+        'Poor': 0
+      };
+
+      scores.forEach(score => {
+        if (score >= 90) {
+          scoreCategories['Excellent']++;
+        } else if (score >= 80) {
+          scoreCategories['Good']++;
+        } else if (score >= 70) {
+          scoreCategories['Average']++;
+        } else {
+          scoreCategories['Poor']++;
+        }
+      });
+
+      scoreCategoriesChart.data.labels = Object.keys(scoreCategories);
+      scoreCategoriesChart.data.datasets[0].data = Object.values(scoreCategories);
+      scoreCategoriesChart.update();
+    }
+
+    // Khởi tạo biểu đồ
+    const scoreDistributionCtx = document.getElementById('score-distribution').getContext('2d');
+    const scoreDistributionChart = new Chart(scoreDistributionCtx, {
+      type: 'bar',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Score',
+          data: [],
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    const completionPieCtx = document.getElementById('completion-pie').getContext('2d');
+    const completionPieChart = new Chart(completionPieCtx, {
+      type: 'pie',
+      data: {
+        labels: ['Hoàn thành', 'Chưa hoàn thành'],
+        datasets: [{
+          data: [],
+          backgroundColor: ['#ff6384', '#e6e6e6']
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            labels: {
+              color: '#333'
+            }
+          }
+        }
+      }
+    });
+
+    const scoreCategoriesCtx = document.getElementById('score-categories').getContext('2d');
+    const scoreCategoriesChart = new Chart(scoreCategoriesCtx, {
+      type: 'pie',
+      data: {
+        labels: [],
+        datasets: [{
+          data: [],
+          backgroundColor: ['#e6e6e6', '#ff6384', '#ffa07a', '#ffbf9f']
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            labels: {
+              color: '#333'
+            }
+          }
+        }
+      }
+    });
+
+    // Đặt mặc định cho kỳ thi 1
+    updateStats(exam1Scores, exam1CompletedAttempts, exam1TotalAttempts);
+  </script>
+</body>
+</html>

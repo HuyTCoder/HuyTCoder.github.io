@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam</title>
+</head>
+<body>
+  <div class="top-bar">
+    <h1>Exam</h1>
+  </div>
+  
+  <div class="container">
+    <div id="questionsContainer"></div>
+  
+    <button onclick="submitExam()">Submit Exam</button>
+    <p id="timer">Time Left: <span id="time">30:00</span></p>
+  </div>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  .top-bar {
+    background-color: #be3826;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+  }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  #questionsContainer {
+    margin-bottom: 20px;
+  }
+  #questionsContainer div {
+    margin-bottom: 10px;
+  }
+  button {
+    padding: 10px 20px;
+    background-color: #be3826;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: darkred;
+  }
+  #timer {
+    text-align: center;
+  }
+</style>
+
+<script>
+
+var timeLeft = 1800; 
+var timer = setInterval(function() {
+  var minutes = Math.floor(timeLeft / 60);
+  var seconds = timeLeft % 60;
+  document.getElementById("time").textContent = (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+  timeLeft--;
+  if (timeLeft < 0) {
+    clearInterval(timer);
+    alert("Time's up!");
+    submitExam();
+  }
+}, 1000);
+
+
+var questions = [
+  {
+    question: "What is the capital of France?",
+    options: ["Paris", "London", "Berlin", "Rome"],
+    answer: 0 
+  },
+  {
+    question: "What is the largest planet in our solar system?",
+    options: ["Mars", "Jupiter", "Venus", "Saturn"],
+    answer: 1 
+  },
+  {
+    question: "What is the chemical symbol for water?",
+    options: ["Wo", "Wa", "H2O", "Hy"],
+    answer: 2 
+  },
+  {
+    question: "What is the capital of Japan?",
+    options: ["Tokyo", "Beijing", "Seoul", "Bangkok"],
+    answer: 0 
+},
+{
+    question: "Who wrote the famous play 'Romeo and Juliet'?",
+    options: ["William Shakespeare", "Charles Dickens", "Jane Austen", "Leo Tolstoy"],
+    answer: 0 
+},
+{
+    question: "What is the chemical symbol for gold?",
+    options: ["Au", "Ag", "Fe", "Cu"],
+    answer: 0 
+},
+{
+    question: "Which planet is known as the 'Red Planet'?",
+    options: ["Mars", "Jupiter", "Venus", "Saturn"],
+    answer: 0 
+},
+{
+    question: "Who painted the Mona Lisa?",
+    options: ["Leonardo da Vinci", "Vincent van Gogh", "Pablo Picasso", "Michelangelo"],
+    answer: 0 
+},
+{
+    question: "What is the largest mammal in the world?",
+    options: ["Blue whale", "Elephant", "Giraffe", "Hippopotamus"],
+    answer: 0 
+},
+{
+    question: "Which country is famous for the ancient pyramids?",
+    options: ["Egypt", "Mexico", "Peru", "China"],
+    answer: 0 
+},
+
+  
+];
+
+// Display questions
+var currentQuestion = 0;
+displayQuestions();
+
+function displayQuestions() {
+  var questionsContainer = document.getElementById("questionsContainer");
+  questionsContainer.innerHTML = ""; // Clear previous questions
+  for (var i = 0; i < questions.length; i++) {
+    var questionDiv = document.createElement("div");
+    questionDiv.innerHTML = "<h3>Question " + (i + 1) + ": " + questions[i].question + "</h3>";
+    for (var j = 0; j < questions[i].options.length; j++) {
+      var option = document.createElement("input");
+      option.type = "radio";
+      option.name = "option" + i;
+      option.value = j;
+      var label = document.createElement("label");
+      label.textContent = questions[i].options[j];
+      questionDiv.appendChild(option);
+      questionDiv.appendChild(label);
+      questionDiv.appendChild(document.createElement("br"));
+    }
+    questionsContainer.appendChild(questionDiv);
+  }
+}
+
+
+function submitExam() {
+  clearInterval(timer);
+ 
+  var userAnswers = [];
+  for (var i = 0; i < questions.length; i++) {
+    var selectedOption = document.querySelector('input[name="option' + i + '"]:checked');
+    if (selectedOption) {
+      var answerIndex = parseInt(selectedOption.value);
+      userAnswers.push(answerIndex);
+    } else {
+      userAnswers.push(null); 
+    }
+  }
+  localStorage.setItem("examResult", JSON.stringify({ userAnswers: userAnswers, questions: questions }));
+  window.location.href = "result.html";
+}
+</script>
+</body>
+</html>
+
+
+
